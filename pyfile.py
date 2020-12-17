@@ -30,7 +30,7 @@ def to_utf8(filename):
             df = pd.read_csv(filename,engine='python',encoding='GBK')
         else:
             df = pd.read_csv(filename,engine='python',encoding='utf-8')
-        df.to_csv(filename,encoding='utf-8')
+        df.to_excel(ext[0]+'.xlsx')
     elif ext[1]=='.xls' or ext[1] == '.xlsx':
         if 'gb' in encoding or 'GB' in encoding:
             df = pd.read_excel(filename,encoding='GBK')
@@ -49,9 +49,3 @@ def batch_to_utf8(path,ext_name='csv'):
         if os.path.splitext(file)[1]=='.'+ext_name:
             to_utf8(os.path.join(path,file))
 
-
-
-if __name__ == '__main__':
-    to_utf8('./testdata/titanic-train.csv')
-    encoding = get_encoding('./testdata/titanic-train.csv')
-    print(encoding)
