@@ -56,25 +56,28 @@ def combine_files(path, save_name='combine.csv'):
     """
     @param: path下合并所有后缀为csv的文件到save_name一个文件里
     @param: save_name 合并后的文件名称
-    @return: 打印成功信息表明合并OK，并在path的上一级目录输出合并后save_name文件
+    @return: 打印成功信息表明合并OK，并在根目录输出合并后save_name文件
+            导出文件会增加一列：文件名，标志来自哪个源文件
     """
-    if 
+    if not os.path.isdir(path):
+        print('%s 必须是文件夹' % (path,))
+        return 
     tmp = pd.DataFrame()
     for filename in os.listdir(path):
         fs = os.path.splitext(filename)
         if fs[1] == '.csv':
-            df = pd.read_csv(filename, engine='python', index_col=False)
+            df = pd.read_csv(os.path.join(path,filename), engine='python', index_col=False)
         elif fs[1] in ('.xls','.xlsx'):
-            df = pd.read_excel(filename, index_col=False)
+            df = pd.read_excel(os.path.join(path,filename), index_col=False)
         if len(df) <= 0:
             continue
         df.loc[:,'unnamed'] = fs[0]
         tmp = tmp.append(df)
 
     if 'csv' in save_name:
-        tmp.to_csv('../' + save_name, encoding='utf-8-sig', index=False)
+        tmp.to_csv(os.path.join(os.getcwd(),save_name), encoding='utf-8-sig', index=False)
     elif 'xls' in save_name or 'xlsx' in save_name:
-        tmp.to_excel('../' + save_name)
+        tmp.to_excel(os.path.join(os.getcwd(),save_name))
     else:
         print('the name of outputting file must be with csv, xls, xlsx format')
 
@@ -82,4 +85,4 @@ def combine_files(path, save_name='combine.csv'):
 
 
 if __name__ == '__main__':
-    combine_files('./testdata/titanic-train.csv')
+    combine_files('./testdata')
