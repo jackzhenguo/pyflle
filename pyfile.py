@@ -30,7 +30,8 @@ def to_utf8(filename):
             df = pd.read_csv(filename, engine='python', encoding='GBK',index_col=False)
         else:
             df = pd.read_csv(filename,engine='python',encoding=encoding,index_col=False)
-        df.to_csv(filename, encoding='utf-8-sig',index=False)
+        df.to_csv(filename, encoding='utf-8-sig', index=False)
+        
     elif ext[1]=='.xls' or ext[1] == '.xlsx':
         if 'gb' in encoding or 'GB' in encoding:
             df = pd.read_excel(filename,encoding='GBK')
@@ -51,5 +52,3 @@ def batch_to_utf8(path,ext_name='csv'):
             to_utf8(os.path.join(path,file))
 
 
-if __name__ == '__main__':
-    to_utf8('1101 - 排线明细结果.csv')
