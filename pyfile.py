@@ -52,3 +52,27 @@ def batch_to_utf8(path,ext_name='csv'):
             to_utf8(os.path.join(path,file))
 
 
+def combine_csv(path, ext_name='csv', save_name='combine.csv'):
+    """
+    @param: path下合并所有后缀为csv的文件到save_name一个文件里
+    @param: ext_name 是待合并的文件扩展名，默认为csv格式
+    @param: save_name 合并后的文件名称
+    @return: 打印成功信息表明合并OK，并在path的上一级目录输出合并后save_name文件
+    """
+    tmp = pd.DataFrame()
+    for filename in os.listdir(path):
+        fs = os.path.splitext(filename)
+        if fs[1] == '.' + ext_name:
+            df = pd.read_csv(filename, engine='python', index_col=False)
+            if len(df) <= 0:
+                continue
+        df.loc[:,'unnamed'] = fs[0]
+        tmp = tmp.append(df)
+    if 'csv' in save_name:
+        tmp.to_csv('../' + save_name, encoding='utf-8-sig', index=False)
+    elif 'xls' in save_name or 'xlsx' in save_name:
+        tmp.to_excel('../' + save_name)
+    else:
+        print('the name of outputting file must be with csv, xls, xlsx format')
+
+    print('combining succeed')
