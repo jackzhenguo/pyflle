@@ -69,6 +69,9 @@ def combine_files(path, save_name='combine.csv'):
             df = pd.read_csv(os.path.join(path,filename), engine='python', index_col=False)
         elif fs[1] in ('.xls','.xlsx'):
             df = pd.read_excel(os.path.join(path,filename), index_col=False)
+		else:
+		    continue
+			
         if len(df) <= 0:
             continue
         df.loc[:,'unnamed'] = fs[0]
